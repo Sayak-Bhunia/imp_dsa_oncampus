@@ -13,7 +13,7 @@ int main() {
     for(auto it:a) set.insert(it);
     for(auto it:b) {
         if(set.find(it) != set.end()) {
-            f = 0;
+            f = true;
             break;
         }
     }
