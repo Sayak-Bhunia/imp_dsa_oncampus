@@ -14,5 +14,14 @@ int main() {
             else a[k--] = b[j--];
     }
     while(j>=0) a[k--] = b[j--];
+--------------------------------------- or ------
+    vector<int> merged(m+n);
+    int i = 0, j = 0, k = 0;
+    while(i<n && j<m) {
+        if(a[i]<b[j]) merged[k++] = a[i++];
+        else merged[k++] = b[j++];
+    }
+    while(i<n) merged[k++] = a[i++];
+    while(j<m) merged[k++] = b[j++];
     for(auto it:a) cout << it << " ";
 }
