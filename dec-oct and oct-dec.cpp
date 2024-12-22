@@ -1,11 +1,6 @@
-string decToOctal(int n) {
-    string s = "";
-    if(n == 0) return "0";
-    while(n != 0) {
-        s = to_string(n%8) + s;
-        n /= 8;
-    }
-    return s;
+long int dectoOctal(int n) {
+    if(n == 0) return 0;
+    else return n%8 + 10*octal(n/8);
 }
 
 int octalToDec(string n) {
