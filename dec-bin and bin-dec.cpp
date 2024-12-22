@@ -1,11 +1,6 @@
-string dectobin(int n) {
-    string s = "";
-    if(n == 0) return "0";
-    while(n != 0) {
-        s = to_string(n%2) + s;
-        n /= 2;
-    }
-    return s;
+long int dectoBin(int n) {
+    if(n == 0) return 0;
+    else return n%2 + 10*octal(n/2);
 }
 
 int bintodec(string &s) {
