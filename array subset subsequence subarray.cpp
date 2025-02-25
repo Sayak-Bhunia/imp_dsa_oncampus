@@ -34,14 +34,14 @@ bool isSubsequence(vector<int>& a, vector<int>& b) {
 bool isSubarray(vector<int>& A, vector<int>& B) {
     int n = A.size(), m = B.size();
     for(int i=0;i<=n-m;i++) {
-        bool match = true;
+        bool f = true;
         for(int j=0;j<m;j++) {
             if(A[i+j] != B[j]) {
-                match = false;
+                f = false;
                 break;
             }
         }
-        if (match) return true;
+        if(f) return true;
     }
     return false; 
 }
