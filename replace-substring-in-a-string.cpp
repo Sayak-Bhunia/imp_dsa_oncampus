@@ -15,10 +15,7 @@ string helper(string &s, string &a, string &b) {
             res += b;
             i += m;
         }
-        else {
-            res += s[i];
-            i++;
-        }
+        else res += s[i++];
     }
     return res;
 }
