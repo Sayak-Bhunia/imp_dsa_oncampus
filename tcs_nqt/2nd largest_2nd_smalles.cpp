@@ -25,7 +25,7 @@ int main() {
     cin >> n;
     vector<int> arr(n);
     for(int i=0;i<n;i++) cin >> arr[i];
-    int a = INT_MIN, b = INT_MIN;
+    int a = INT_MIN, b = INT_MIN;  //int a = Integer.MIN_VALUE, b = Integer.MIN_VALUE; <- for java
     int c = INT_MAX, d = INT_MAX;
     for(auto it:arr) {
         if(it>a) {
