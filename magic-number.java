@@ -1,22 +1,23 @@
-import java.util.*;
+#include <bits/stdc++.h>
+#define lint long long
+using namespace std;
 
-class A {
-    public static int sumd(int n) {
+bool helper(int n) {
+    if(n == 1) return true;
+    else if(n<10) return false;
+    else {
         int sum = 0;
         while(n != 0) {
             sum += n%10;
             n /= 10;
         }
-        return sum;
+        return helper(sum);
     }
-    public static boolean helper(int n) {
-        while(n>=10) n = sumd(n);
-        return n == 1;
-    }
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        if(helper(n)) System.out.println("magic number");
-        else System.out.println("not magic number");
-    }
+}
+
+int main() {
+    int n;
+    cin >> n;
+    if(helper(n)) cout << "true" <<endl;
+    else cout << "false" <<endl;
 }
