@@ -14,8 +14,8 @@ int helper(int n) {
     int prev1 = 1, prev2 = 1, curr;
     for(int i=2;i<=n;i++) {
         curr = prev1 + prev2;
-        prev2 = prev1;
-        prev1 = curr;
+        prev1 = prev2;
+        prev2 = curr;
     }
     return curr;
 }
