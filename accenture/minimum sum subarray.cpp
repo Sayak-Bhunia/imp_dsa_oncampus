@@ -8,10 +8,10 @@ int helper(int n, int k, vector<int> &a) {
     int mn = sum;
     vector<int> b(a.begin(), a.end() + k);
     for(int i=k;i<n;i++) {
-        sum += a[i] - a[i-k];
+        sum += a[i] - a[i-k]; // left element minus kore right er new element plus korchi mane window soracchi
         if(sum<mn) {
             mn = sum;
-            b.clear();
+            b.clear(); // new elements gulo k add korchi jader minimum sum
             for(int j=i-k+1;j<=i;j++) b.push_back(a[j]);
         }
     }
