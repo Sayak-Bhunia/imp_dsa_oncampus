@@ -1,22 +1,19 @@
 #include <bits/stdc++.h>
-#define lint long long 
+#define lint long long
 using namespace std;
 
-char* DectoNBase(int n, int num) {
-    string c = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    string res = "";
-    while(num != 0) {
-        res = c[num%n] + res;
-        num /= n;
+string helper(int n, int m) {
+    if(m == 0) return "0";
+    string ch = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", res;
+    while(m != 0) {
+        res = ch[m%n] + res;
+        m /= n;
     }
-    char* s = new char[res.size()+1];
-    strcpy(s, res.c_str());
-    return s;
+    return res;
 }
 
-int main() {   
-    int n, num;
-    cin >> n >> num;
-    char* result = DectoNBase(n, num);
-    cout << result << endl;
-} 
+int main() {
+    int n,m;
+    cin >> n >> m;
+    cout << helper(n, m) <<endl;
+}
