@@ -34,3 +34,45 @@ class Solution {
         return res;
     }
 };
+
+
+// User function Template for C++
+class Solution {
+  public:
+    long long largestSumCycle(int N, vector<int> Edge) {
+        // code here
+        vector<int> c(N, 0);
+        for(auto it:Edge) {
+            if(it != -1) c[it]++;
+        }
+        vector<int> vis(N, 0);
+        queue<int> q;
+        for(int i=0;i<N;i++) {
+            if(c[i] == 0) {
+                vis[i] = 1;
+                q.push(i);
+            }
+        }
+        while(!q.empty()) {
+            int node = q.front();
+            q.pop();
+            if(Edge[node] == -1) continue;
+            --c[Edge[node]];
+            if(c[Edge[node]] == 0) {
+                vis[Edge[node]] = 1;
+                q.push(Edge[node]);
+            }
+        }
+        int res = -1;
+        for(int i=0;i<N;i++) {
+            if(vis[i]) continue;
+            int sum = 0;
+            for(int j=i;vis[j] == 0;j=Edge[j]) {
+                vis[j] = 1;
+                sum += j;
+            }
+            res = max(res, sum);
+        }
+        return res;
+    }
+};
