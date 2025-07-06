@@ -17,11 +17,11 @@ class A {
         swap(a, i+1, h);
         return i+1;
     }
-    public static void helper(int[] a, int l, int h) {
+    public static void quickSort(int[] a, int l, int h) {
         if(l<h) {
             int p = partition(a, l, h);
-            helper(a, l, p-1);
-            helper(a, p+1, h);
+            quickSort(a, l, p-1);
+            quickSort(a, p+1, h);
         }
     }
     public static void main(String[] args) {
@@ -29,7 +29,7 @@ class A {
         int n = sc.nextInt();
         int[] a = new int[n];
         for(int i=0;i<n;i++) a[i] = sc.nextInt();
-        helper(a, 0, n-1);
+        quickSort(a, 0, n-1);
         for(int i=0;i<n;i++) System.out.print(a[i] + " ");
     }
 }
