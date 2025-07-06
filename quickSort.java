@@ -6,7 +6,7 @@ class A {
         a[i] = a[j];
         a[j] = z;
     }
-    public static int partition(int[] a, int l, int h) {
+    public static int quickSort(int[] a, int l, int h) {
         int i = l - 1;
         for(int j=l;j<h;j++) {
             if(a[j]<=a[h]) {
@@ -17,11 +17,11 @@ class A {
         swap(a, i+1, h);
         return i+1;
     }
-    public static void helper(int[] a, int l, int h) {
+    public static void partition(int[] a, int l, int h) {
         if(l<h) {
-            int p = partition(a, l, h);
-            helper(a, l, p-1);
-            helper(a, p+1, h);
+            int p = quickSort(a, l, h);
+            partition(a, l, p-1);
+            partition(a, p+1, h);
         }
     }
     public static void main(String[] args) {
@@ -29,7 +29,7 @@ class A {
         int n = sc.nextInt();
         int[] a = new int[n];
         for(int i=0;i<n;i++) a[i] = sc.nextInt();
-        helper(a, 0, n-1);
+        partition(a, 0, n-1);
         for(int i=0;i<n;i++) System.out.print(a[i] + " ");
     }
 }
