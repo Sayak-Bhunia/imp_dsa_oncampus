@@ -1,0 +1,25 @@
+public class FormalDress {
+
+    public static int minLengthToRemove(int[] a, int n, int k) {
+        int i = 0, j = n - 1, c = 0;
+        while(i<=j) {
+            if(a[i] + a[j]<=k) {
+                c += j - i + 1;
+                i++;
+            }
+            else j--;
+        }
+        return c;
+    } 
+
+    public static void main(String[] args) {
+        int n = 4;
+        int k = 5;
+        int[] a = new int[n];
+        a[0] = 1;
+        a[1] = 3;
+        a[2] = 5;
+        a[3] = 8;
+        System.out.println(minLengthToRemove(a, n, k));  // Output: 4 (removes from 3 to 6)
+    }
+}
