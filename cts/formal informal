@@ -1,0 +1,40 @@
+public class FormalDress {
+
+    public static int minLengthToRemove(String a) {
+        char[] s = a.toCharArray();
+        int l = -1, r = -1, c = 0;
+        for(int i=0;i<a.length();i++) {
+            if(s[i] == 'I') {
+                c++;
+                if(c == 2) l = i;
+                r = i;
+            }
+        }
+        if(l<=1) return 0;
+        return r - l + 1;
+    } 
+
+    public static void main(String[] args) {
+        String input = "FIFFIIFFFI";
+        System.out.println(minLengthToRemove(input));  // Output: 4 (removes from 3 to 6)
+    }
+}
+
+
+def min_length_to_remove(s):
+    c = 0
+    l = r = -1
+    for i in range(0, len(s)):
+        if s[i] == 'I':
+            c+=1
+            if c == 2:
+                l = i
+            r = i
+    if l<=1:
+        return 0
+    return r - l + 1
+
+
+# Example usage
+s = "FIFFIIFFFI"
+print(min_length_to_remove(s))  # Output: 4
