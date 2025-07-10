@@ -1,0 +1,84 @@
+import java.util.*;
+
+public class CollatzAnalyzer {
+
+    // Task 1: Generate Collatz sequence for a number
+    public static List<Integer> helper(int n) {
+        List<Integer> a = new ArrayList<>();
+        while(n != 1) {
+            a.add(n);
+            if(n%2 == 0) n /= 2;
+            else n = n*3 + 1;
+        }
+        a.add(1);
+        return a;
+    }
+    
+    public static void helper1(int n) {
+        List<Integer> a = helper(n);
+        for(int i = 0; i < a.size(); i++) {
+            System.out.print(a.get(i));
+            if (i < a.size() - 1) System.out.print(" ");
+        }
+        System.out.print(",");
+        int mxl = 0, mxln = 0, mxval = 0, mxvaln = 0;
+        for(int i=1;i<=n;i++) {
+            List<Integer> b = helper(i);
+            if(b.size()>mxl) {
+                mxl = b.size();
+                mxln = i;
+            }
+            for(int it:b) {
+                mxval = Math.max(mxval, it);
+                mxvaln = i;
+            }
+        }
+        System.out.print(mxl + " " + mxln + ","); 
+        System.out.print(mxval + " " + mxvaln); 
+    }
+    public static void main(String[] args) {
+        int N = 5; // Change this input if needed
+        helper1(N);
+    }
+}
+
+
+def helper(n):
+    a = []
+    while n != 1:
+        a.append(n)
+        if n%2 == 0:
+            n //= 2
+        else:
+            n = n*3 + 1
+    a.append(1)
+    return a
+
+def helper1(n):
+    a = helper(n)
+    for i in range(0, len(a)):
+        print(a[i], end="")
+        if i<len(a)-1:
+            print(" ", end="")
+    print(",", end="")
+    mxl = mxln = mxval = mxvaln = 0
+    for i in range(1, n+1):
+        b = helper(i)
+        if len(b)>mxl:
+            mxl = len(b)
+            mxln = i
+            
+        for j in b:
+            mxval = max(mxval, j)
+            mxvaln = i
+    print(mxl,end="")
+    print(" ",end="")
+    print(mxln,end="")
+    print(",", end="")
+    print(mxval,end="")
+    print(" ",end="")
+    print(mxvaln,end="")
+
+# Main
+N = int(input())
+helper1(N)
