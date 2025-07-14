@@ -1,0 +1,25 @@
+import java.util.*;
+
+public class KnowledgeEnhancement {
+
+    public static int maxBooks(int[] a, int k, int n) {
+        int c = 0;
+        Arrays.sort(a);
+        int i = 0;
+        while(i<n && a[i]<=k) {
+            k -= a[i];
+            c++;
+            i++;
+        }
+        return c;
+    }
+
+    public static void main(String[] args) {
+        int[] A = {4, 2, 3, 1};
+        int N = 5;
+        int size = A.length;
+
+        int result = maxBooks(A, N, size);
+        System.out.println("Maximum number of books Alex can read: " + result);
+    }
+}
