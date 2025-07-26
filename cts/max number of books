@@ -8,6 +8,7 @@ public class KnowledgeEnhancement {
         int i = 0;
         while(i<n && a[i]<=k) {
             k -= a[i];
+            // if(k<0) break;
             c++;
             i++;
         }
