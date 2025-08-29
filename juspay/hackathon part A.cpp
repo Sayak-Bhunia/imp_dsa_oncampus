@@ -3,28 +3,30 @@ using namespace std;
 
 struct TreeNode {
     string name;
-    int lockedBy;             // -1 if unlocked
+    int lockedBy; // -1 if unlocked
     bool isLocked;
-    int lockedDescendantCount; // Count of locked descendants for fast checks
     TreeNode* parent;
     vector<TreeNode*> children;
+    unordered_set<TreeNode*> lockedDescendants; // Faster lookups and inserts
+
     TreeNode(string nm, TreeNode* par) {
         name = nm;
         parent = par;
         lockedBy = -1;
         isLocked = false;
-        lockedDescendantCount = 0;
     }
 };
 
 class MAryTree {
     TreeNode* root;
     unordered_map<string, TreeNode*> nodeMap;
+
 public:
     MAryTree(string rootName) {
         root = new TreeNode(rootName, nullptr);
         nodeMap[rootName] = root;
     }
+
     void buildTree(vector<string>& nodes, int m) {
         queue<TreeNode*> q;
         q.push(root);
@@ -32,7 +34,7 @@ public:
         while (!q.empty() && idx < n) {
             TreeNode* current = q.front();
             q.pop();
-            for(int i=0;i<m && idx<n;i++) {
+            for (int i = 0; i < m && idx < n; i++) {
                 TreeNode* child = new TreeNode(nodes[idx], current);
                 current->children.push_back(child);
                 nodeMap[nodes[idx]] = child;
@@ -44,20 +46,22 @@ public:
 
     bool lock(string name, int uid) {
         TreeNode* node = nodeMap[name];
-        if(node->isLocked || node->lockedDescendantCount > 0) return false;
-        // Check ancestors
+        if (node->isLocked || !node->lockedDescendants.empty()) return false;
+
         TreeNode* temp = node->parent;
-        while(temp) {
-            if(temp->isLocked) return false;
+        while (temp) {
+            if (temp->isLocked) return false;
             temp = temp->parent;
         }
-        // Lock the node
+
+        // Lock node
         node->isLocked = true;
         node->lockedBy = uid;
-        // Update all ancestors' lockedDescendantCount
+
+        // Update ancestors
         temp = node->parent;
-        while(temp) {
-            temp->lockedDescendantCount++;
+        while (temp) {
+            temp->lockedDescendants.insert(node);
             temp = temp->parent;
         }
         return true;
@@ -65,14 +69,16 @@ public:
 
     bool unlock(string name, int uid) {
         TreeNode* node = nodeMap[name];
-        if(!node->isLocked || node->lockedBy != uid) return false;
+        if (!node->isLocked || node->lockedBy != uid) return false;
+
         // Unlock node
         node->isLocked = false;
         node->lockedBy = -1;
+
         // Update ancestors
         TreeNode* temp = node->parent;
-        while(temp) {
-            temp->lockedDescendantCount--;
+        while (temp) {
+            temp->lockedDescendants.erase(node);
             temp = temp->parent;
         }
         return true;
@@ -80,33 +86,28 @@ public:
 
     bool upgradeLock(string name, int uid) {
         TreeNode* node = nodeMap[name];
-        if(node->isLocked || node->lockedDescendantCount == 0) return false;
-        // Check all locked descendants have same uid
-        if(!checkAllDescendantsSameUser(node, uid)) return false;
+        if (node->isLocked || node->lockedDescendants.empty()) return false;
+
+        // Check all locked descendants have the same uid
+        for (TreeNode* ld : node->lockedDescendants) {
+            if (ld->lockedBy != uid) return false;
+        }
+
         // Check ancestors not locked
         TreeNode* temp = node->parent;
         while (temp) {
             if (temp->isLocked) return false;
             temp = temp->parent;
         }
+
         // Unlock all descendants
-        unlockAllDescendants(node, uid);
+        auto copyDesc = node->lockedDescendants; // Copy to avoid invalidation
+        for (TreeNode* ld : copyDesc) {
+            unlock(ld->name, uid);
+        }
+
         // Lock current node
         return lock(name, uid);
-    }
-
-private:
-    bool checkAllDescendantsSameUser(TreeNode* node, int uid) {
-        if (node->isLocked && node->lockedBy != uid) return false;
-        for(TreeNode* child:node->children) {
-            if(!checkAllDescendantsSameUser(child, uid)) return false;
-        }
-        return true;
-    }
-
-    void unlockAllDescendants(TreeNode* node, int uid) {
-        if(node->isLocked && node->lockedBy == uid) unlock(node->name, uid);
-        for(TreeNode* child:node->children) unlockAllDescendants(child, uid);
     }
 };
 
@@ -114,10 +115,12 @@ int main() {
     int n, m, q;
     cin >> n >> m >> q;
     vector<string> nodes(n);
-    for(int i=0;i<n;i++) cin >> nodes[i];
+    for (int i = 0; i < n; i++) cin >> nodes[i];
+
     MAryTree tree(nodes[0]);
     tree.buildTree(nodes, m);
-    while(q--) {
+
+    while (q--) {
         int type, uid;
         string name;
         cin >> type >> name >> uid;
