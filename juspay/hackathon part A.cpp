@@ -103,7 +103,7 @@ public:
         // Unlock all descendants
         auto copyDesc = node->lockedDescendants; // Copy to avoid invalidation
         for (TreeNode* ld : copyDesc) {
-            unlock(ld->name, uid);
+            if(!unlock(ld->name, uid)) return false;
         }
 
         // Lock current node
