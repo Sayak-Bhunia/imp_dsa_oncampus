@@ -27,7 +27,7 @@ public:
         nodeMap[rootName] = root;
     }
 
-    void buildTree(vector<string>& nodes, int m) {
+    void build(vector<string>& nodes, int m) {
         queue<TreeNode*> q;
         q.push(root);
         int idx = 1, n = nodes.size();
@@ -44,7 +44,7 @@ public:
         }
     }
 
-    bool lock(string name, int uid) {
+    bool lock(string name, int UserId) {
         TreeNode* node = nodeMap[name];
         if (node->isLocked || !node->lockedDescendants.empty()) return false;
 
@@ -56,7 +56,7 @@ public:
 
         // Lock node
         node->isLocked = true;
-        node->lockedBy = uid;
+        node->lockedBy = UserId;
 
         // Update ancestors
         temp = node->parent;
@@ -67,9 +67,9 @@ public:
         return true;
     }
 
-    bool unlock(string name, int uid) {
+    bool unlock(string name, int UserId) {
         TreeNode* node = nodeMap[name];
-        if (!node->isLocked || node->lockedBy != uid) return false;
+        if (!node->isLocked || node->lockedBy != UserId) return false;
 
         // Unlock node
         node->isLocked = false;
@@ -84,13 +84,13 @@ public:
         return true;
     }
 
-    bool upgradeLock(string name, int uid) {
+    bool upgradeLock(string name, int UserId) {
         TreeNode* node = nodeMap[name];
         if (node->isLocked || node->lockedDescendants.empty()) return false;
 
-        // Check all locked descendants have the same uid
+        // Check all locked descendants have the same UserId
         for (TreeNode* ld : node->lockedDescendants) {
-            if (ld->lockedBy != uid) return false;
+            if (ld->lockedBy != UserId) return false;
         }
 
         // Check ancestors not locked
@@ -103,11 +103,11 @@ public:
         // Unlock all descendants
         auto copyDesc = node->lockedDescendants; // Copy to avoid invalidation
         for (TreeNode* ld : copyDesc) {
-            if(!unlock(ld->name, uid)) return false;
+            if(!unlock(ld->name, UserId)) return false;
         }
 
         // Lock current node
-        return lock(name, uid);
+        return lock(name, UserId);
     }
 };
 
@@ -118,17 +118,17 @@ int main() {
     for (int i = 0; i < n; i++) cin >> nodes[i];
 
     MAryTree tree(nodes[0]);
-    tree.buildTree(nodes, m);
+    tree.build(nodes, m);
 
     while (q--) {
-        int type, uid;
+        int type, UserId;
         string name;
-        cin >> type >> name >> uid;
-        bool result = false;
-        if (type == 1) result = tree.lock(name, uid);
-        else if (type == 2) result = tree.unlock(name, uid);
-        else if (type == 3) result = tree.upgradeLock(name, uid);
-        cout << (result ? "true" : "false") << "\n";
+        cin >> type >> name >> UserId;
+        bool res = false;
+        if (type == 1) res = tree.lock(name, UserId);
+        else if (type == 2) res = tree.unlock(name, UserId);
+        else if (type == 3) res = tree.upgradeLock(name, UserId);
+        cout << (res ? "true" : "false") << "\n";
     }
     return 0;
 }
