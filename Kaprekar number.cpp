@@ -2,31 +2,26 @@
 using namespace std;
 
 bool isKaprekar(long long n) {
-    if (n == 1) return true;
+    if (n == 1)  // 1 is a Kaprekar number
+        return true;
 
-    long long sq_n = n * n;
-    int count_digits = to_string(sq_n).length();
+    long long sq = n * n;
+    int d = to_string(n).length();  // number of digits in n
 
-    for (int r_digits = 1; r_digits < count_digits; r_digits++) {
-        long long eq_parts = 1;
-        for (int i = 0; i < r_digits; i++) eq_parts *= 10; // avoid pow()
+    long long right = sq % (long long)pow(10, d);
+    long long left = sq / (long long)pow(10, d);
 
-        if (eq_parts == n) continue;
-
-        long long left = sq_n / eq_parts;
-        long long right = sq_n % eq_parts;
-
-        if (left + right == n)
-            return true;
-    }
-
-    return false;
+    return (left + right) == n;
 }
 
 int main() {
-    cout << "First few Kaprekar Numbers:\n";
-    for (int i = 1; i < 10000; i++) {
-        if (isKaprekar(i)) cout << i << " ";
-    }
+    long long n;
+    cin >> n;
+
+    if (isKaprekar(n))
+        cout << n << " is a Kaprekar number\n";
+    else
+        cout << n << " is NOT a Kaprekar number\n";
+
     return 0;
 }
