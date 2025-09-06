@@ -30,3 +30,28 @@ bool lock(string name, int id) {
     }
 
 
+bool lock(string name, int UserId) {
+        TreeNode* node = nodemp[name];
+        node->lockedCount++;
+        if(node->lockedCount>1) {
+            node->lockedCount--;
+            return false;
+        }
+        TreeNode* par = node->parent;
+        while(par) {
+            if(par->lockedCount>0 || par->lockedDescendant.size()) {
+                node->lockedCount--;
+                TreeNode* par1 = node->parent;
+                while(par1 != par) {
+                    node->lockedDescendant.erase(node);
+                    par1 = par1->parent;
+                }
+                return false;
+            }
+            par->lockedDescendants.insert(node);
+            par = par->parent;
+        }
+        node->lockedBy = UserId;
+        return true;
+    }
+
