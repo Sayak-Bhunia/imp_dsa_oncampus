@@ -1,31 +1,21 @@
-bool lock(string name, int id) {
+bool lock(string name, int UserId) {
         TreeNode* node = nodeMap[name];
-
-        // Step 1: Check if node is already locked or has locked descendants
-        if (node->lockedCount > 0 || !node->lockedDescendants.empty()) {
-            return false;
-        }
-
-        // Step 2: Check if any ancestor nodes are locked or have locked descendants
+        lock_guard<mutex> guard(node->mtx);
+        if (node->isLocked || !node->lockedDescendants.empty()) return false;
         TreeNode* temp = node->parent;
         while (temp) {
-            if (temp->lockedCount > 0 || !temp->lockedDescendants.empty()) {
-                return false;
-            }
+            lock_guard<mutex> ancestorGuard(temp->mtx); 
+            if (temp->isLocked) return false;
             temp = temp->parent;
         }
-
-        // Step 3: Lock the node by incrementing lockedCount
-        node->lockedCount = 1;
-        node->lockedBy = id;
-
-        // Step 4: Add the node to the lockedDescendants of all ancestors
+        node->isLocked = true;
+        node->lockedBy = UserId;
         temp = node->parent;
         while (temp) {
+            lock_guard<mutex> ancestorGuard(temp->mtx);
             temp->lockedDescendants.insert(node);
             temp = temp->parent;
         }
-
         return true;
     }
 
@@ -33,25 +23,27 @@ bool lock(string name, int id) {
 bool lock(string name, int UserId) {
         TreeNode* node = nodemp[name];
         node->lockedCount++;
-        if(node->lockedCount>1) {
+        if(node->lockedCount>1 || node->lockedDescendants.size()) {
             node->lockedCount--;
             return false;
         }
         TreeNode* par = node->parent;
         while(par) {
-            if(par->lockedCount>0 || par->lockedDescendant.size()) {
+            par->lockedDescendants.insert(node);
+            if(par->isLocked || par->lockedCount>0) {
+                par->lockedDescendants.erase(node);
                 node->lockedCount--;
                 TreeNode* par1 = node->parent;
                 while(par1 != par) {
-                    node->lockedDescendant.erase(node);
+                    par1->lockedDescendants.erase(node);
                     par1 = par1->parent;
                 }
                 return false;
             }
-            par->lockedDescendants.insert(node);
             par = par->parent;
         }
         node->lockedBy = UserId;
+        node->isLocked = true;
         return true;
     }
 
