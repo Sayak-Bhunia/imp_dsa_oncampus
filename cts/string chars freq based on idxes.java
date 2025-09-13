@@ -3,20 +3,19 @@ import java.util.Scanner;
 public class Main {
     public static String formatString(String a) {
         int[] mp = new int[256];
+        int n = a.length();
+        String res = "";
         char[] s = a.toCharArray();
-        
-        // Store first occurrence positions
-        for (int i = 0; i < a.length(); i++) {
-            if (mp[s[i]] == 0) mp[s[i]] = i + 1;
+        for(int i=0;i<n;i++) {
+            if(mp[s[i]] == 0) mp[s[i]] = i + 1;
         }
-        
-        String res = new String(); // use StringBuilder for efficiency
-        for (int i = 0; i < a.length(); i++) {
-            while(mp[s[i]] != 0) {
+        for(int i=0;i<n;i++) {
+            int m = mp[s[i]];
+            while(m != 0) {
                 res += s[i];
-                mp[s[i]]--;
+                m--;
             }
-            if (i != a.length() - 1) res += '-';
+            if(i != n - 1) res += "-";
         }
         return res;
     }
@@ -31,24 +30,3 @@ public class Main {
         sc.close();
     }
 }
-
-
-def format_string(s) -> str:
-    mp = [0]*256
-    for i in range(0, len(s)):
-        if mp[ord(s[i])] == 0:
-            mp[ord(s[i])] = i + 1
-    res = ""
-    for i in range(0, len(s)):
-        c = mp[ord(s[i])]
-        res += s[i]*c
-        if i != len(s) - 1:
-            res += '-'
-    return res
-    
-
-
-# Main
-s = input().strip()
-print(format_string(s))
-
