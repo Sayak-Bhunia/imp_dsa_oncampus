@@ -2,21 +2,15 @@ import java.util.*;
 
 public class Main {
     public static int discountedSum(int[] arr, int k) {
-        Set<Integer> set = new HashSet<>();
+        Set<Integer> set = new TreeSet<>();
         for(int it:arr) set.add(it);
-        if(set.size()<k) return 0;
-        int[] a = new int[set.size()];
         int i = 0, n = set.size();
+        if(n<k) return 0;
+        int[] a = new int[n];
         for(int it:set) a[i++] = it;
-        Arrays.sort(a);
-        for(i=0;i<n/2;i++) {
-            a[i] ^= a[n-i-1];
-            a[n-i-1] ^= a[i];
-            a[i] ^= a[n-i-1];
-        }
         int sum = 0;
-        for(i=0;i<k;i++) sum += a[i];
-        return sum - a[0];
+        for(i=n-1;i>=n-k;i--) sum += a[i];
+        return sum - a[n-1];
     }
 
     public static void main(String[] args) {
