@@ -41,3 +41,36 @@ int main() {
     }
     cout << d << " " << b <<endl;
 }
+
+
+import java.util.*;
+
+public class ReverseWords {
+    public static int helper(String s) {
+        int[] mp = new int[256];
+        int c = 0;
+        for(char it:s.toCharArray()) {
+            if(Character.isLetter(it)) {
+                mp[it]++;
+                c++;
+            }
+        }
+        char[] st = new char[c];
+        int i = 0;
+        for(char it:s.toCharArray()) {
+            if(Character.isLetter(it)) st[i++] = it;
+        }
+        int res = 0;
+        for(char it:st) {
+            for(i=0;i<s.length()-3;i++) {
+                if(s.charAt(i+1) == it && (s.charAt(i) == mp[it] || s.charAt(i+2) == mp[it])) res++;
+            }
+        }
+        return res;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(helper("a2a3b12ac"));
+    }
+}
+
