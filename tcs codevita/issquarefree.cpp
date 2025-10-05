@@ -10,16 +10,12 @@ bool helper1(int n) {
 }
 
 int helper(lint n) {
-    vector<lint> d;
-    for(lint i=1;i<=sqrt(n);i++) {
-        if(n%i == 0) {
-            d.push_back(i);
-            if(i != n/i) d.push_back(n/i);
-        }
-    }
     int c = 0;
-    for(auto it:d) {
-        if(it != 1 && helper1(it)) c++;
+    for(lint i=2;i<=sqrt(n);i++) {
+        if(n%i == 0) {
+            if(helper1(i)) c++;
+            if(i != n/i && helper1(n/i)) c++;
+        }
     }
     return c;
 }
