@@ -3,7 +3,13 @@
 using namespace std;
 
 int main() {
-    int a,b,c,n;
+    // string line;
+    // getline(cin, line); // read the entire line as a string
+
+    // istringstream iss(line);
+    // int a, b, c, n;
+    // iss >> a >> b >> c >> n;
+    // int a,b,c,n;
     cin >> a >> b >> c >> n;
     string s = string(a, 'a') + string(b, 'b') + string(c, 'c');
     set<string> res;
