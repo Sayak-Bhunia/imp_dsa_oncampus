@@ -2,6 +2,12 @@
 using namespace std;
 
 int main() {
+    // string line;
+    // getline(cin, line); // read the entire line as a string
+
+    // istringstream iss(line);
+    // int a, b, c, n;
+    // iss >> a >> b >> c >> n;
     vector<int> v;
     string line;
     getline(cin, line);
